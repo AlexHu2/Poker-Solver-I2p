@@ -1,0 +1,57 @@
+/* src/components/Player.css */
+.player {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .player.bottom {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .player.top {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .player.left {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .player.right {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .player-name {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .player-chips {
+    margin-bottom: 5px;
+    color: white;
+  }
+  
+  .player-cards {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .player-cards .card {
+    width: 50px;
+    height: 75px;
+  }
+  
+  .player-cards .card.back {
+    background-color: #1e88e5;
+  }
+  
