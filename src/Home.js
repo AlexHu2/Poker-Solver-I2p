@@ -1,6 +1,7 @@
 // src/components/Home.js
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+
 import pokerTableImg from './images/home_photo1.jpg';
 import leaderboardImg from './images/home_photo2.jpg';
 import { useNavigate } from 'react-router-dom';
