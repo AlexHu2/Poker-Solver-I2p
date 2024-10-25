@@ -14,7 +14,7 @@ const Home = () => {
 
       <Row className="mb-4 justify-content-center">
         <Col lg={10}>
-          <Card className="w-100">
+          <Card className="w-100 bg-dark text-white">
             <Card.Img variant="top" src={pokerTableImg} alt="Placeholder Image 1" />
             <Card.Body>
               <Card.Title>Try the puzzle</Card.Title>
@@ -31,7 +31,7 @@ const Home = () => {
 
       <Row className="mb-4 justify-content-center">
         <Col lg={10}>
-          <Card className="w-100">
+          <Card className="w-100 bg-dark text-white">
             <Card.Img variant="top" src={leaderboardImg}  alt="Placeholder Image 2" />
             <Card.Body>
               <Card.Title>Leaderboard</Card.Title>
@@ -48,7 +48,7 @@ const Home = () => {
 
       <Row className="justify-content-center">
         <Col lg={12}>
-          <Card className="w-100 text-center">
+          <Card className="w-100 bg-dark text-white">
             <Card.Body>
               <Card.Title>About Our Poker App</Card.Title>
               <Card.Text>
