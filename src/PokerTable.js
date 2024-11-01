@@ -40,7 +40,7 @@ const PokerTable = ({ theme }) => {
           <div className="card back"></div>
           <div className="card back"></div>
         </div>
-        <div className="pot">💰 500</div>
+        <div className="pot"> 3 BB</div>
         <Player position="bottom" name="Player 1" />
         <Player position="top" name="Player 2" />
         <Player position="left" name="Player 3" />

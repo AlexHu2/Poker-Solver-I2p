@@ -1,25 +1,26 @@
 /* src/components/ActionPanel.css */
 
 .action-panel {
-    position: fixed; /* Changed from absolute to fixed */
+    position: fixed;
     bottom: 20px;
-    right: 20px; /* Position 20px from the right */
+    right: 20px;
     display: flex;
     gap: 15px;
-    z-index: 1000; /* Ensure it's above other elements */
+    z-index: 1000;
   }
   
   .action-button {
-    padding: 10px 20px;
-    font-size: 1em;
+    padding: 15px 30px; /* Increased padding */
+    font-size: 1.25em;  /* Increased font size */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Slightly more rounded corners */
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
   }
   
   .action-button:hover {
-    opacity: 0.9;
+    opacity: 0.95;
+    transform: scale(1.05); /* Slightly enlarges the button on hover */
   }
   
   .fold-button {
@@ -40,5 +41,19 @@
   .raise-full-button {
     background-color: #388e3c; /* Green */
     color: white;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .action-panel {
+      bottom: 15px;
+      right: 15px;
+      gap: 10px;
+    }
+  
+    .action-button {
+      padding: 12px 24px; /* Adjusted padding for smaller screens */
+      font-size: 1.1em;   /* Adjusted font size for smaller screens */
+    }
   }
   

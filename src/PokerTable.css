@@ -56,15 +56,17 @@ body, html {
 
 .pot {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%); /* Adjusted from -50% to -40% */
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px 20px;
   border-radius: 20px;
   font-size: 1.2em;
   font-weight: bold;
 }
+
+
 
 /* Ensure the action panel is on top */
 .action-panel {
