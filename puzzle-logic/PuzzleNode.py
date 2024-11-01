@@ -1,3 +1,5 @@
+import tkinter as tk
+
 class PuzzleNode:
     def __init__(
         self,
@@ -33,24 +35,6 @@ class PuzzleNode:
         self.stack = stack
         self.hand = hand
         self.curr_cards = curr_cards or []
-
-    def display(self):
-        """
-        Displays the current game state.
-        """
-        print(f"Stage: {self.stage}")
-        print(f"Hero Position: {self.position}")
-        print(f"Villain Position: {self.villain_position}")
-        print(f"{'Hero' if self.hero else 'Villain'}: {self.description}")
-        if self.hand:
-            print(f"Hero's Hand: {self.hand}")
-        if self.curr_cards:
-            print(f"Community Cards: {', '.join(self.curr_cards)}")
-        print("Available actions:")
-        for action in self.next_actions.keys():
-            print(f" - {action}")
-        print(f"Expected Value: {self.expected_value}\n")
-
 
 def create_poker_puzzle():
     # Flop and later cards
@@ -120,7 +104,7 @@ def create_poker_puzzle():
     )
 
     end_hero_calls_river_node = PuzzleNode(
-        description="You call. Villain shows a A♥ 10♦. You win the showdown.",
+        description="You call. Villain shows A♥ 10♦. You win the showdown.",
         expected_value=6,  # You win the pot
         next_actions={},
         hero=True,
@@ -169,9 +153,9 @@ def create_poker_puzzle():
     )
 
     villain_bets_river_node.next_actions = {
-        "call": end_hero_calls_river_node,
-        "raise": end_villain_folds_to_raise_node,
-        "fold": end_hero_folds_river_node
+        "Call": end_hero_calls_river_node,
+        "Raise": end_villain_folds_to_raise_node,
+        "Fold": end_hero_folds_river_node
     }
 
     # Villain checks back on the turn
@@ -189,9 +173,9 @@ def create_poker_puzzle():
 
     # Hero's options on the river after villain checks back turn
     villain_checks_back_turn_node.next_actions = {
-        "bet 1/2 pot": end_villain_fold_node_river,
-        "bet 3/4 pot": end_villain_fold_node_river,
-        "check": villain_bets_river_node
+        "Bet 1/2 Pot": end_villain_fold_node_river,
+        "Bet 3/4 Pot": end_villain_fold_node_river,
+        "Check": villain_bets_river_node
     }
 
     # Hero's options on the turn after both check on flop
@@ -208,9 +192,9 @@ def create_poker_puzzle():
     )
 
     villain_checks_back_flop_node.next_actions = {
-        "bet 1/2 pot": end_villain_fold_node_turn,
-        "bet 3/4 pot": end_villain_fold_node_turn,
-        "check": villain_checks_back_turn_node
+        "Bet 1/2 Pot": end_villain_fold_node_turn,
+        "Bet 3/4 Pot": end_villain_fold_node_turn,
+        "Check": villain_checks_back_turn_node
     }
 
     # Flop stage
@@ -227,9 +211,9 @@ def create_poker_puzzle():
     )
 
     flop_hero_node.next_actions = {
-        "bet 1/2 pot": end_villain_fold_node_flop,
-        "bet 3/4 pot": end_villain_fold_node_flop,
-        "check": villain_checks_back_flop_node
+        "Bet 1/2 Pot": end_villain_fold_node_flop,
+        "Bet 3/4 Pot": end_villain_fold_node_flop,
+        "Check": villain_checks_back_flop_node
     }
 
     # Preflop hero node
@@ -245,36 +229,99 @@ def create_poker_puzzle():
     )
 
     preflop_hero_node.next_actions = {
-        "fold": end_hero_fold_node_preflop,
-        "call": flop_hero_node,
-        "raise to 10 BB": end_villain_fold_node_preflop
+        "Fold": end_hero_fold_node_preflop,
+        "Call": flop_hero_node,
+        "Raise to 10 BB": end_villain_fold_node_preflop
     }
 
     return preflop_hero_node
 
+class PokerPuzzleGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Poker Puzzle")
+        self.initial_node = create_poker_puzzle()
+        self.current_node = self.initial_node
+        self.create_widgets()
+        self.display_node(self.current_node)
+
+    def create_widgets(self):
+        self.stage_label = tk.Label(self.root, text="", font=("Helvetica", 16))
+        self.stage_label.pack(pady=5)
+
+        self.positions_label = tk.Label(self.root, text="", font=("Helvetica", 12))
+        self.positions_label.pack(pady=5)
+
+        self.description_label = tk.Label(self.root, text="", font=("Helvetica", 12), wraplength=400)
+        self.description_label.pack(pady=5)
+
+        self.hand_label = tk.Label(self.root, text="", font=("Helvetica", 12))
+        self.hand_label.pack(pady=5)
+
+        self.cards_label = tk.Label(self.root, text="", font=("Helvetica", 12))
+        self.cards_label.pack(pady=5)
+
+        self.actions_frame = tk.Frame(self.root)
+        self.actions_frame.pack(pady=10)
+
+        self.expected_value_label = tk.Label(self.root, text="", font=("Helvetica", 12))
+        self.expected_value_label.pack(pady=5)
+
+    def display_node(self, node):
+        # Clear previous action buttons
+        for widget in self.actions_frame.winfo_children():
+            widget.destroy()
+
+        self.stage_label.config(text=f"Stage: {node.stage}")
+        self.positions_label.config(text=f"Hero Position: {node.position} | Villain Position: {node.villain_position}")
+        player = "Hero" if node.hero else "Villain"
+        self.description_label.config(text=f"{player}: {node.description}")
+
+        if node.hand and node.hero:
+            self.hand_label.config(text=f"Hero's Hand: {node.hand}")
+        else:
+            self.hand_label.config(text="")
+
+        if node.curr_cards:
+            self.cards_label.config(text=f"Community Cards: {', '.join(node.curr_cards)}")
+        else:
+            self.cards_label.config(text="")
+
+        self.expected_value_label.config(text=f"Expected Value: {node.expected_value}")
+
+        if not node.next_actions:
+            # Game over
+            # Display the final result and expected value in the GUI
+            self.description_label.config(text=f"Game Over: {node.description}")
+            self.expected_value_label.config(text=f"Final Expected Value: {node.expected_value}")
+
+            # Add a Reset button
+            reset_button = tk.Button(
+                self.actions_frame,
+                text="Reset Game",
+                width=20,
+                command=self.reset_game
+            )
+            reset_button.pack(pady=2)
+            return
+
+        for action_text, next_node in node.next_actions.items():
+            action_button = tk.Button(
+                self.actions_frame,
+                text=action_text,
+                width=20,
+                command=lambda n=next_node: self.display_node(n)
+            )
+            action_button.pack(pady=2)
+
+    def reset_game(self):
+        self.current_node = self.initial_node
+        self.display_node(self.current_node)
 
 def run_puzzle():
-    current_node = create_poker_puzzle()
-
-    while True:
-        current_node.display()
-
-        if not current_node.next_actions:
-            print("Puzzle ended.")
-            break
-
-        action = input("Choose your action (enter exactly as shown): ").strip()
-
-        if action not in current_node.next_actions:
-            print("Invalid action. Please choose a valid action from the options provided.\n")
-            continue
-
-        # Move to the next node
-        current_node = current_node.next_actions[action]
-
-    print(f"Final Expected Value: {current_node.expected_value}")
-    print(f"Result: {current_node.description}")
-
+    root = tk.Tk()
+    app = PokerPuzzleGUI(root)
+    root.mainloop()
 
 if __name__ == "__main__":
     run_puzzle()
