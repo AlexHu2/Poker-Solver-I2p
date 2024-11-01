@@ -1,51 +1,65 @@
 /* src/components/PokerTable.css */
 .table-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #2e7d32; /* Dark green background resembling a poker table */
-  }
-  
-  .poker-table {
-    position: relative;
-    width: 600px;
-    height: 600px;
-    background-color: #388e3c; /* Table color */
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  }
-  
-  .community-cards {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    gap: 10px;
-  }
-  
-  .card {
-    width: 60px;
-    height: 90px;
-    border-radius: 5px;
-    background-color: white;
-    border: 1px solid #000;
-  }
-  
-  .card.back {
-    background-color: #1e88e5; /* Blue back for cards */
-  }
-  
-  .pot {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.green-table {
+  background-color: #2e7d32; /* Dark green background resembling a poker table */
+}
+
+.red-table {
+  background-color: #b71c1c; /* Dark red background */
+}
+
+/* Poker table color based on theme */
+.poker-table {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.green-poker-table {
+  background-color: #2e7d32; /* Green table color */
+}
+
+.red-poker-table {
+  background-color: #b71c1c; /* Red table color */
+}
+
+.community-cards {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 10px;
+}
+
+.card {
+  width: 60px;
+  height: 90px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid #000;
+}
+
+.card.back {
+  background-color: #1e88e5; /* Blue back for cards */
+}
+
+.pot {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
