@@ -5,11 +5,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import PokerTable from './PokerTable';
 import Home from './Home';
-import './dark-mode.css';
 
 const App = () => (
   <Router>
-    <Navbar expand="lg" className="bg-dark navbar-dark">
+    <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
     <Container>
       <Navbar.Brand as={Link} to="/">Poker Puzzle</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -26,7 +25,7 @@ const App = () => (
     </Container>
   </Navbar>
 
-  <Container className="mt-4 bg-dark text-light" fluid>
+  <Container className="mt-4">
     <Routes>
       {/* Daily Puzzle route */}
       <Route path='' element={<Home/>}/>
