@@ -5,6 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Modal from 'react-bootstrap/Modal';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import PokerTable from './PokerTable';
 import Home from './Home';
@@ -15,10 +16,14 @@ const App = () => {
   const [hintsEnabled, setHintsEnabled] = useState(false);
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
   const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(false);
-  const [tableTheme, setTableTheme] = useState('G'); // Default theme is Green
+  const [tableTheme, setTableTheme] = useState('G');
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const buttonStyle = { fontSize: '0.75rem', padding: '0.25rem 0.5rem' };
-  const dropdownItemStyle = { fontSize: '0.875rem' }; // Smaller font size for dropdown items
+  const dropdownItemStyle = { fontSize: '0.875rem' };
+
+  const handleHelpClick = () => setShowHelpModal(true);
+  const handleClose = () => setShowHelpModal(false);
 
   return (
     <Router>
@@ -35,7 +40,6 @@ const App = () => {
                 <NavDropdown.Item href="#action/3.3" style={dropdownItemStyle}>All-time</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Settings" id="settings-nav-dropdown">
-                
                 {/* Hints Setting */}
                 <NavDropdown.Item style={dropdownItemStyle}>
                   <div className="d-flex justify-content-between align-items-center">
@@ -128,12 +132,7 @@ const App = () => {
                   </div>
                 </NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown title="Help" id="help-nav-dropdown">
-                <NavDropdown.Item href="#action/4.1" style={dropdownItemStyle}>How to Play</NavDropdown.Item>
-                <NavDropdown.Item href="#action/4.2" style={dropdownItemStyle}>Rules</NavDropdown.Item>
-                <NavDropdown.Item href="#action/4.3" style={dropdownItemStyle}>FAQ</NavDropdown.Item>
-                <NavDropdown.Item href="#action/4.4" style={dropdownItemStyle}>Contact Support</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link onClick={handleHelpClick}>Help</Nav.Link> {}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -146,6 +145,30 @@ const App = () => {
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Container>
+
+      {/* Help Modal */}
+      <Modal show={showHelpModal} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Help</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>How to Play</h5>
+          <p>In this poker puzzle game, players try to guess the best move
+   for a given poker scenario, receiving feedback to guide them towards the optimal decision within a limited number of attempts.<br /><br />
+   Points and streaks are awarded based on accuracy and speed, with options for more complex multi-round challenges for advanced players.</p>
+
+          <h5>FAQ</h5>
+          <p><strong>Q:</strong> How do I start a new game?<br />
+             <strong>A:</strong> Click "Daily Puzzle" from the main menu.</p>
+          <p><strong>Q:</strong> Can I save my progress?<br />
+             <strong>A:</strong> Currently, saving is not available. Each session is separate.</p>
+          <h5>Contact Support</h5>
+          <p>If you have any questions or need assistance, please contact our support team at <a href="dyu318@gatech.edu">dyu318@gatech.edu</a>.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </Router>
   );
 };
