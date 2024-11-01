@@ -1,34 +1,36 @@
 /* src/components/PokerTable.css */
+
+/* Reset default margins and paddings */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevents scrollbars */
+}
+
 .table-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background-color: #333333; /* Dark grey background */
 }
 
-.green-table {
-  background-color: #2e7d32; /* Dark green background resembling a poker table */
-}
-
-.red-table {
-  background-color: #b71c1c; /* Dark red background */
-}
-
-/* Poker table color based on theme */
 .poker-table {
-  position: relative;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
+  position: relative; /* Necessary for absolute positioning inside */
+  width: 800px; /* Increased width for horizontal elongation */
+  height: 500px; /* Decreased height for oval shape */
+  border-radius: 50% / 30%; /* Creates an oval shape */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-.green-poker-table {
-  background-color: #2e7d32; /* Green table color */
-}
-
-.red-poker-table {
-  background-color: #b71c1c; /* Red table color */
+  background-color: #333333; /* Dark grey table */
 }
 
 .community-cards {
@@ -54,7 +56,7 @@
 
 .pot {
   position: absolute;
-  top: 60%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
@@ -62,4 +64,9 @@
   border-radius: 20px;
   font-size: 1.2em;
   font-weight: bold;
+}
+
+/* Ensure the action panel is on top */
+.action-panel {
+  z-index: 1000; /* Should match or exceed the ActionPanel's z-index */
 }

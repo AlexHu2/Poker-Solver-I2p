@@ -138,14 +138,11 @@ const App = () => {
         </Container>
       </Navbar>
 
-      <Container className="mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/daily-puzzle" element={<PokerTable theme={tableTheme} />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Container>
-
+      <Routes>
+        <Route path="/" element={<Container className="mt-4"><Home /></Container>} />
+        <Route path="/daily-puzzle" element={<PokerTable theme={tableTheme} />} />
+        <Route path="/settings" element={<Container className="mt-4"><Settings /></Container>} />
+      </Routes>
       {/* Help Modal */}
       <Modal show={showHelpModal} onHide={handleClose} centered>
         <Modal.Header closeButton>

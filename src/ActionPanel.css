@@ -1,0 +1,44 @@
+/* src/components/ActionPanel.css */
+
+.action-panel {
+    position: fixed; /* Changed from absolute to fixed */
+    bottom: 20px;
+    right: 20px; /* Position 20px from the right */
+    display: flex;
+    gap: 15px;
+    z-index: 1000; /* Ensure it's above other elements */
+  }
+  
+  .action-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .action-button:hover {
+    opacity: 0.9;
+  }
+  
+  .fold-button {
+    background-color: #d32f2f; /* Red */
+    color: white;
+  }
+  
+  .check-button {
+    background-color: #1976d2; /* Blue */
+    color: white;
+  }
+  
+  .raise-half-button {
+    background-color: #ffa000; /* Amber */
+    color: white;
+  }
+  
+  .raise-full-button {
+    background-color: #388e3c; /* Green */
+    color: white;
+  }
+  
