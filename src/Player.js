@@ -2,14 +2,40 @@
 import React from 'react';
 import './Player.css';
 
-const Player = ({ position, name }) => {
+const Player = ({ position, name, cards = [] }) => {
+  // Function to determine card color based on suit
+  const getCardColor = (card) => {
+    if (card.includes('♠') || card.includes('♣')) {
+      return 'black';
+    } else if (card.includes('♥') || card.includes('♦')) {
+      return 'red';
+    }
+    return 'transparent'; // Default for "back"
+  };
+
   return (
     <div className={`player ${position}`}>
       <div className="player-name">{name}</div>
-      <div className="player-chips"> 100 BB </div>
+      <div className="player-chips">100 BB</div>
       <div className="player-cards">
-        <div className="card back"></div>
-        <div className="card back"></div>
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            className={`card ${card === 'back' ? 'back' : ''}`}
+            style={{
+              backgroundColor: card !== 'back' ? 'white' : '#1e88e5',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '0.8em',
+              fontWeight: 'bold',
+              border: '1px solid black',
+              color: card !== 'back' ? getCardColor(card) : 'transparent',
+            }}
+          >
+            {card !== 'back' && <span>{card}</span>}
+          </div>
+        ))}
       </div>
     </div>
   );
