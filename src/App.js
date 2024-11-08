@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Modal from 'react-bootstrap/Modal';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import PokerTable from './PokerTable';
+import PokerTable from './components/PokerTable/PokerTable';
 import Home from './Home';
 import Settings from './Settings';
 import 'bootstrap/dist/css/bootstrap.min.css';

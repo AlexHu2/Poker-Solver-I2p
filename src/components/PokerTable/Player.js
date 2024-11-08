@@ -1,6 +1,7 @@
 // src/components/Player.js
 import React from 'react';
 import './Player.css';
+import createPokerPuzzle from './createPokerPuzzle';
 
 const Player = ({ position, name, cards = [] }) => {
   // Function to determine card color based on suit
@@ -10,7 +11,7 @@ const Player = ({ position, name, cards = [] }) => {
     } else if (card.includes('♥') || card.includes('♦')) {
       return 'red';
     }
-    return 'transparent'; // Default for "back"
+    return 'transparent';
   };
 
   return (
