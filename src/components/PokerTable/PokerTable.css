@@ -30,13 +30,17 @@
 }
 
 
-
 body, html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Prevents scrollbars */
+ /* Prevents scrollbars */
+  /* overflow: hidden; */
+}
+
+body.poker-table-page {
+  overflow: hidden; /* Disable scrolling */
 }
 
 .table-container {
@@ -44,8 +48,9 @@ body, html {
   justify-content: center;
   align-items: center;
   width: 100vw; /* Full viewport width */
-  height: 100vh; /* Full viewport height */
+  height: calc(100vh);; /* Full viewport height */
   background-color: #333333; /* Dark grey background */
+
 }
 
 .poker-table {

@@ -1,6 +1,6 @@
 // PokerTable.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ActionPanel from './ActionPanel';
 import './PokerTable.css';
 import Player from './Player';
@@ -8,6 +8,15 @@ import createPokerPuzzle from './createPokerPuzzle';
 
 const PokerTable = () => {
   // Initialize the puzzle node as state
+  useEffect(() => {
+    // Disable scrolling when this component mounts
+    document.body.style.overflow = 'hidden';
+
+    // Re-enable scrolling when this component unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
   const [puzzleNode, setPuzzleNode] = useState(createPokerPuzzle());
 
   // Generic event handler for actions
@@ -36,7 +45,7 @@ const PokerTable = () => {
 
         {/* Community Cards Component */}
         <CommunityCards cards={puzzleNode.currCards} />
-        
+
         <div className="pot">3 BB</div>
         <Player
           position="bottom"
@@ -46,7 +55,7 @@ const PokerTable = () => {
         <Player
           position="top"
           name={puzzleNode.villainPosition}
-          cards={["",""]}
+          cards={["", ""]}
         />
         <Player position="left" name="Player 3" />
         <Player position="right" name="Player 4" />
@@ -72,7 +81,7 @@ const PokerTable = () => {
 const CommunityCards = ({ cards = [] }) => {
   // Number of cards to display when no cards are present
   const DEFAULT_CARD_COUNT = 5;
-  
+
 
   // If we have cards, display them
   if (cards.length > 0) {
