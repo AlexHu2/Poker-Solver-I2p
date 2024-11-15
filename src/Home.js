@@ -21,9 +21,9 @@ const Home = () => {
               <Card.Text>
                 Compete against other players on the daily puzzle.
               </Card.Text>
-                <Button variant="primary" onClick={() => navigate('/daily-puzzle')}>
-                  Go to Puzzle
-                </Button>
+              <Button variant="primary" onClick={() => navigate('/daily-puzzle')}>
+                Go to Puzzle
+              </Button>
             </Card.Body>
           </Card>
         </Col>

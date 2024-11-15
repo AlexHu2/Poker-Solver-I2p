@@ -27,6 +27,7 @@ const App = () => {
 
   return (
     <Router>
+      {/* Navbar is outside the Routes */}
       <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
         <Container>
           <Navbar.Brand as={Link} to="/">Poker Puzzle</Navbar.Brand>
@@ -62,7 +63,6 @@ const App = () => {
                     </ButtonGroup>
                   </div>
                 </NavDropdown.Item>
-
                 {/* Dark Mode Setting */}
                 <NavDropdown.Item style={dropdownItemStyle}>
                   <div className="d-flex justify-content-between align-items-center">
@@ -85,7 +85,6 @@ const App = () => {
                     </ButtonGroup>
                   </div>
                 </NavDropdown.Item>
-
                 {/* Sound Effects Setting */}
                 <NavDropdown.Item style={dropdownItemStyle}>
                   <div className="d-flex justify-content-between align-items-center">
@@ -108,7 +107,6 @@ const App = () => {
                     </ButtonGroup>
                   </div>
                 </NavDropdown.Item>
-
                 {/* Table Theme Setting */}
                 <NavDropdown.Item style={dropdownItemStyle}>
                   <div className="d-flex justify-content-between align-items-center">
@@ -132,17 +130,19 @@ const App = () => {
                   </div>
                 </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link onClick={handleHelpClick}>Help</Nav.Link> {}
+              <Nav.Link onClick={handleHelpClick}>Help</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
+      {/* Routes are defined below */}
       <Routes>
         <Route path="/" element={<Container className="mt-4"><Home /></Container>} />
         <Route path="/daily-puzzle" element={<PokerTable theme={tableTheme} />} />
         <Route path="/settings" element={<Container className="mt-4"><Settings /></Container>} />
       </Routes>
+
       {/* Help Modal */}
       <Modal show={showHelpModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
@@ -150,10 +150,11 @@ const App = () => {
         </Modal.Header>
         <Modal.Body>
           <h5>How to Play</h5>
-          <p>In this poker puzzle game, players try to guess the best move
-   for a given poker scenario, receiving feedback to guide them towards the optimal decision within a limited number of attempts.<br /><br />
-   Points and streaks are awarded based on accuracy and speed, with options for more complex multi-round challenges for advanced players.</p>
-
+          <p>
+            In this poker puzzle game, players try to guess the best move
+            for a given poker scenario, receiving feedback to guide them towards the optimal decision within a limited number of attempts.<br /><br />
+            Points and streaks are awarded based on accuracy and speed, with options for more complex multi-round challenges for advanced players.
+          </p>
           <h5>FAQ</h5>
           <p><strong>Q:</strong> How do I start a new game?<br />
              <strong>A:</strong> Click "Daily Puzzle" from the main menu.</p>

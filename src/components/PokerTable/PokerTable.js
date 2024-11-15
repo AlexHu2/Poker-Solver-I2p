@@ -55,7 +55,7 @@ const PokerTable = () => {
         <Player
           position="top"
           name={puzzleNode.villainPosition}
-          cards={["", ""]}
+          cards={['back', 'back']}
         />
         <Player position="left" name="Player 3" />
         <Player position="right" name="Player 4" />
