@@ -46,7 +46,7 @@ const PokerTable = () => {
         {/* Community Cards Component */}
         <CommunityCards cards={puzzleNode.currCards} />
 
-        <div className="pot">3 BB</div>
+        <div className="pot">{puzzleNode.potSize} BB</div>
         <Player
           position="bottom"
           name={puzzleNode.position}

@@ -17,6 +17,7 @@
    * @param {number|null} [stack=null] - Optional stack size.
    * @param {Array<string>} [hand=[]] - Optional array representing hero's hand.
    * @param {Array<string>} [currCards=[]] - Optional array of current community cards.
+   * @param {number} [potSize=0.00] - The current size of the pot.
    */
   constructor(
     description,
@@ -27,7 +28,8 @@
     villainPosition,
     stack = null,
     hand = [],
-    currCards = []
+    currCards = [],
+    potSize = 0.00 // Added potSize parameter with default value
   ) {
     this.description = description;
     this.expectedValue = expectedValue;
@@ -39,6 +41,7 @@
     this.stack = stack;
     this.hand = hand; // Array of individual cards, e.g., ["K♥", "Q♥"]
     this.currCards = currCards; // Array of community cards, e.g., ["K♠", "10♠", "8♦"]
+    this.potSize = parseFloat(potSize.toFixed(2)); // Initialize potSize with two decimals
   }
 
   /**
@@ -66,6 +69,7 @@
       position: ${this.position},
       villainPosition: ${this.villainPosition},
       stack: ${this.stack},
+      potSize: ${this.potSize.toFixed(2)}, // Included potSize
       hand: ${this.hand.join(', ')},
       currCards: ${this.currCards.join(', ')}
     }`;
