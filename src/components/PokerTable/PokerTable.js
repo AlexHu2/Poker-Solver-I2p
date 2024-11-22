@@ -1,12 +1,10 @@
 // PokerTable.js
-
 import React, { useState, useEffect } from 'react';
 import ActionPanel from './ActionPanel';
 import './PokerTable.css';
 import Player from './Player';
-import createPokerPuzzle from './createPokerPuzzle';
 
-const PokerTable = () => {
+const PokerTable = ({pokerPuzzle, initialPokerPuzzle}) => {
   // Initialize the puzzle node as state
   useEffect(() => {
     // Disable scrolling when this component mounts
@@ -17,7 +15,7 @@ const PokerTable = () => {
       document.body.style.overflow = '';
     };
   }, []);
-  const [puzzleNode, setPuzzleNode] = useState(createPokerPuzzle());
+  const [puzzleNode, setPuzzleNode] = useState(pokerPuzzle);
 
   // Generic event handler for actions
   const handleAction = (action) => {
@@ -32,7 +30,7 @@ const PokerTable = () => {
 
   // Reset handler to restart the puzzle
   const handleReset = () => {
-    setPuzzleNode(createPokerPuzzle());
+    setPuzzleNode(initialPokerPuzzle);
   };
 
   return (
