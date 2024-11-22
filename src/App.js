@@ -11,6 +11,7 @@ import PokerTable from './components/PokerTable/PokerTable';
 import Home from './Home';
 import Settings from './Settings';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { createPokerPuzzle1, createPokerPuzzle2, createPokerPuzzle3 } from './createPokerPuzzle'; // Use named import
 
 const App = () => {
   const [hintsEnabled, setHintsEnabled] = useState(false);
@@ -143,11 +144,11 @@ const App = () => {
       {/* Routes are defined below */}
       <Routes>
         <Route path="/" element={<Container className="mt-4"><Home /></Container>} />
-        <Route path="/daily-puzzle1" element={<PokerTable theme={tableTheme} />} />
+        <Route path="/daily-puzzle1" element={<PokerTable pokerPuzzle={createPokerPuzzle1()} initialPokerPuzzle={createPokerPuzzle1()}/>} />
         {/* need to add functionality to this page */}
-        <Route path="/daily-puzzle2" element={<PokerTable theme={tableTheme} />} />
+        <Route path="/daily-puzzle2" element={<PokerTable pokerPuzzle={createPokerPuzzle2()} initialPokerPuzzle={createPokerPuzzle2()}/>} />
         {/* need to add functionality to this page */}
-        <Route path="/daily-puzzle3" element={<PokerTable theme={tableTheme} />} />
+        <Route path="/daily-puzzle3" element={<PokerTable pokerPuzzle={createPokerPuzzle3()} initialPokerPuzzle={createPokerPuzzle3()}/>} />
         <Route path="/settings" element={<Container className="mt-4"><Settings /></Container>} />
       </Routes>
 
