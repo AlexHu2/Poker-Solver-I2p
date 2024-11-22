@@ -34,7 +34,11 @@ const App = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/daily-puzzle">Daily Puzzle</Nav.Link>
+              <NavDropdown title="Puzzles" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/daily-puzzle1" style={dropdownItemStyle}>Puzzle #1</NavDropdown.Item>
+                <NavDropdown.Item href="/daily-puzzle2" style={dropdownItemStyle}>Puzzle #2</NavDropdown.Item>
+                <NavDropdown.Item href="/daily-puzzle3" style={dropdownItemStyle}>Puzzle #3</NavDropdown.Item>
+              </NavDropdown>
               <NavDropdown title="Leaderboard" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1" style={dropdownItemStyle}>Daily</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2" style={dropdownItemStyle}>Weekly</NavDropdown.Item>
@@ -139,7 +143,11 @@ const App = () => {
       {/* Routes are defined below */}
       <Routes>
         <Route path="/" element={<Container className="mt-4"><Home /></Container>} />
-        <Route path="/daily-puzzle" element={<PokerTable theme={tableTheme} />} />
+        <Route path="/daily-puzzle1" element={<PokerTable theme={tableTheme} />} />
+        {/* need to add functionality to this page */}
+        <Route path="/daily-puzzle2" element={<PokerTable theme={tableTheme} />} />
+        {/* need to add functionality to this page */}
+        <Route path="/daily-puzzle3" element={<PokerTable theme={tableTheme} />} />
         <Route path="/settings" element={<Container className="mt-4"><Settings /></Container>} />
       </Routes>
 
