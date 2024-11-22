@@ -1,7 +1,6 @@
 // src/components/Player.js
 import React from 'react';
 import './Player.css';
-import createPokerPuzzle from './createPokerPuzzle';
 
 const Player = ({ position, name, cards = [], chipStack = 100 }) => {
   // Function to determine card color based on suit
