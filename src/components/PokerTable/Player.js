@@ -3,7 +3,7 @@ import React from 'react';
 import './Player.css';
 import createPokerPuzzle from './createPokerPuzzle';
 
-const Player = ({ position, name, cards = [] }) => {
+const Player = ({ position, name, cards = [], chipStack = 100 }) => {
   // Function to determine card color based on suit
   const getCardColor = (card) => {
     if (card.includes('♠') || card.includes('♣')) {
@@ -17,7 +17,7 @@ const Player = ({ position, name, cards = [] }) => {
   return (
     <div className={`player ${position}`}>
       <div className="player-name">{name}</div>
-      <div className="player-chips">100 BB</div>
+      <div className="player-chips"> {`${chipStack} BB`} </div>
       <div className="player-cards">
         {cards.map((card, index) => (
           <div

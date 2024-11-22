@@ -80,7 +80,7 @@ const PokerTable = () => {
 // CommunityCards component (make it seperate eventually)
 const CommunityCards = ({ cards = [] }) => {
   // Number of cards to display when no cards are present
-  const DEFAULT_CARD_COUNT = 5;
+  const DEFAULT_CARD_COUNT = 3;
 
   // If we have cards, display them
   if (cards.length > 0) {
