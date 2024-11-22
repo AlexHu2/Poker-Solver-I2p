@@ -2,15 +2,17 @@
 
 import PuzzleNode from './PuzzleNode';
 
-/**
- * Creates and returns the initial PuzzleNode representing the start of the poker puzzle.
- *
- * @returns {PuzzleNode} The root node of the poker puzzle.
- */
 function createPokerPuzzle1() {
   // Blinds
   const smallBlind = 0.5;
   const bigBlind = 1.0;
+
+  let heroStack = 100.0; // Hero starts with 100 BB
+  let villainStack = 100.0; // Villain starts with 100 BB
+
+  // Hero posts big blind
+  heroStack -= bigBlind; // Hero posts 1.0 BB
+  const heroBigBlind = bigBlind; // Store hero's big blind
 
   // Community cards for various stages
   const currCardsFlop = ['K♠', '10♠', '8♦'];
@@ -18,205 +20,36 @@ function createPokerPuzzle1() {
   const riverCard = '4♥';
 
   // Initial pot after blinds
-  const initialPot = smallBlind + bigBlind; // 1.5 BB
+  const initialPot = smallBlind + bigBlind; // 0.5 + 1.0 = 1.5 BB
 
   // Villain raises to 3 BB preflop
   const villainRaisePreflop = 3.0;
+  villainStack -= 3; // Villain bets 3.0 BB
   const preflopPotAfterVillainRaise = initialPot + villainRaisePreflop; // 1.5 + 3.0 = 4.5 BB
 
-  // Hero's call preflop
-  const heroCallPreflop = 3.0;
-  const heroCallPot = preflopPotAfterVillainRaise + heroCallPreflop; // 4.5 + 3.0 = 7.5 BB
-
-  // Hero raises to 10 BB preflop
-  const heroRaisePreflop = 10.0;
-  const preflopPotAfterHeroRaise = preflopPotAfterVillainRaise + heroRaisePreflop; // 4.5 + 10.0 = 14.5 BB
-
-  // Villain bets 1/2 pot on the river
-  const villainBetRiverAmount = 0.5 * heroCallPot; // 0.5 * 7.5 = 3.75 BB
-  const villainBetRiverPot = heroCallPot + villainBetRiverAmount; // 7.5 + 3.75 = 11.25 BB
-
-  // End nodes for various outcomes
-
-  // Hero folds preflop
+  // Hero's options preflop
+  // If Hero folds preflop
   const endHeroFoldPreflop = new PuzzleNode(
     'You fold and lose the hand.',
-    -bigBlind, // You lose the big blind
+    -heroBigBlind, // You lose the big blind
     false, // Not hero's turn after folding
     'Preflop',
     'BB',
     'UTG',
-    null,
+    heroStack, // Hero's stack remains at 99.0 BB
+    villainStack, // Villain's stack is at 97.0 BB
     ['K♥', 'Q♥'], // Hero's hand as an array
     [],
     initialPot // Pot remains as blinds: 1.5 BB
   );
 
-  // Villain folds preflop after hero raises to 10 BB
-  const endVillainFoldPreflop = new PuzzleNode(
-    'Villain folds to your raise. You win the hand preflop.',
-    villainRaisePreflop, // You win the villain's raise: 3.0 BB
-    false,
-    'Preflop',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [],
-    preflopPotAfterHeroRaise // Total pot after hero's raise: 14.5 BB
-  );
+  // If Hero calls preflop
+  const heroCallPreflop = villainRaisePreflop - heroBigBlind; // 3.0 - 1.0 = 2.0 BB
+  heroStack -= heroCallPreflop; // Hero calls 2.0 BB
+  const preflopPotAfterHeroCall = preflopPotAfterVillainRaise + heroCallPreflop; // 4.5 + 2.0 = 6.5 BB
 
-  // Villain folds on the flop after hero bets 1/2 pot (3.75 BB)
-  const endVillainFoldFlop3_4= new PuzzleNode(
-    'Villain folds to your bet on the flop. You win the hand.',
-    villainRaisePreflop + 3.75, // You win the villain's fold plus your bet
-    false,
-    'Flop',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    currCardsFlop,
-    heroCallPot + heroCallPot * 3/4 // 7.5 + 3.75 = 11.25 BB
-  );
-
-    // Villain folds on the flop after hero bets 1/2 pot (3.75 BB)
-    const endVillainFoldFlop1_2 = new PuzzleNode(
-      'Villain folds to your bet on the flop. You win the hand.',
-      villainRaisePreflop + 3.75, // You win the villain's fold plus your bet
-      false,
-      'Flop',
-      'BB',
-      'UTG',
-      null,
-      ['K♥', 'Q♥'],
-      currCardsFlop,
-      heroCallPot + 3.75 // 7.5 + 3.75 = 11.25 BB
-    );
-
-  // Villain folds on the turn after hero bets 1/2 pot (3.75 BB)
-  const endVillainFoldTurn = new PuzzleNode(
-    'Villain folds to your bet on the turn. You win the hand.',
-    villainRaisePreflop + 3.75, // You win the villain's fold plus your bet
-    false,
-    'Turn',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard],
-    heroCallPot + 3.75 // 7.5 + 3.75 = 11.25 BB
-  );
-
-  // Villain folds on the river after hero bets 1/2 pot (3.75 BB)
-  const endVillainFoldRiver = new PuzzleNode(
-    'Villain folds to your bet on the river. You win the hand.',
-    villainRaisePreflop + 3.75, // You win the villain's fold plus your bet
-    false,
-    'River',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    villainBetRiverAmount + villainBetRiverPot // 7.5 + 3.75 = 11.25 BB
-  );
-
-  // Hero calls on the river and wins showdown
-  const endHeroCallsRiver = new PuzzleNode(
-    'You call. Villain shows A♥, 10♦. You win the showdown.',
-    villainRaisePreflop + heroCallPreflop + villainBetRiverAmount, // 3.0 + 3.0 + 3.75 = 9.75 BB
-    false,
-    'Showdown',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    villainBetRiverPot + villainBetRiverAmount // 7.5 + 3.75 = 11.25 BB
-  );
-
-  // Villain folds to hero's raise on the river
-  const endVillainFoldsToRaise = new PuzzleNode(
-    'Villain folds to your raise. You win the hand.',
-    villainRaisePreflop + heroRaisePreflop, // 3.0 + 10.0 = 13.0 BB
-    false,
-    'River',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    villainBetRiverPot + villainBetRiverAmount * 2.5
-  );
-
-  // Hero folds on the river
-  const endHeroFoldsRiver = new PuzzleNode(
-    'You fold. Villain wins the hand.',
-    -heroCallPreflop, // You lose your call: 3.0 BB
-    false,
-    'River',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    heroCallPreflop // Represents the amount lost: 3.0 BB
-  );
-
-  // Villain actions on the river
-  const villainBetsRiver = new PuzzleNode(
-    'Villain bets 1/2 pot on the river.',
-    0, // Expected value to be calculated based on actions
-    true,
-    'River',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    villainBetRiverPot // 11.25 BB
-  );
-
-  villainBetsRiver.addNextAction('Call', endHeroCallsRiver);
-  villainBetsRiver.addNextAction('Raise 2.5x', endVillainFoldsToRaise);
-  villainBetsRiver.addNextAction('Fold', endHeroFoldsRiver);
-
-  // Villain checks back on the turn
-  const villainChecksBackTurn = new PuzzleNode(
-    'Villain checks back on the turn.',
-    0, // Expected value remains unchanged
-    true,
-    'River',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard, riverCard],
-    heroCallPot // 7.5 BB
-  );
-
-  villainChecksBackTurn.addNextAction('Bet 1/2 Pot', endVillainFoldRiver);
-  villainChecksBackTurn.addNextAction('Bet 3/4 Pot', endVillainFoldRiver);
-  villainChecksBackTurn.addNextAction('Check', villainBetsRiver);
-
-  // Villain checks back on the flop
-  const villainChecksBackFlop = new PuzzleNode(
-    'Villain checks back on the flop.',
-    0, // Expected value remains unchanged
-    true,
-    'Turn',
-    'BB',
-    'UTG',
-    null,
-    ['K♥', 'Q♥'],
-    [...currCardsFlop, turnCard],
-    heroCallPot // 7.5 BB
-  );
-
-  villainChecksBackFlop.addNextAction('Bet 1/2 Pot', endVillainFoldTurn);
-  villainChecksBackFlop.addNextAction('Bet 3/4 Pot', endVillainFoldTurn);
-  villainChecksBackFlop.addNextAction('Check', villainChecksBackTurn);
+  // Hero's stack after preflop call: 97.0 BB
+  const heroStackAfterPreflopCall = heroStack;
 
   // Flop stage
   const flopHeroNode = new PuzzleNode(
@@ -226,25 +59,281 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'UTG',
-    null,
+    heroStackAfterPreflopCall, // 97.0 BB
+    villainStack, // 97.0 BB
     ['K♥', 'Q♥'],
     currCardsFlop,
-    heroCallPot // 7.5 BB
+    preflopPotAfterHeroCall // 6.5 BB
   );
 
+  // Hero bets 1/2 pot on the flop
+  const heroBetFlopHalfPot = preflopPotAfterHeroCall * 0.5; // 6.5 * 0.5 = 3.25 BB
+  const heroStackAfterFlopBetHalfPot = heroStackAfterPreflopCall - heroBetFlopHalfPot; // 97.0 - 3.25 = 93.75 BB
+  const potAfterHeroFlopBetHalfPot = preflopPotAfterHeroCall + heroBetFlopHalfPot; // 6.5 + 3.25 = 9.75 BB
+
+  // Villain folds to Hero's half-pot bet on the flop
+  const endVillainFoldFlop1_2 = new PuzzleNode(
+    'Villain folds to your half-pot bet on the flop. You win the hand.',
+    potAfterHeroFlopBetHalfPot, // You win the pot: 9.75 BB
+    false,
+    'Flop',
+    'BB',
+    'UTG',
+    heroStackAfterFlopBetHalfPot, // Hero's stack: 93.75 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    currCardsFlop,
+    potAfterHeroFlopBetHalfPot // 9.75 BB
+  );
+
+  // Hero bets 3/4 pot on the flop
+  const heroBetFlopThreeQuarterPot = preflopPotAfterHeroCall * 0.75; // 6.5 * 0.75 = 4.875 BB
+  const heroStackAfterFlopBetThreeQuarterPot = heroStackAfterPreflopCall - heroBetFlopThreeQuarterPot; // 97.0 - 4.875 = 92.125 BB
+  const potAfterHeroFlopBetThreeQuarterPot = preflopPotAfterHeroCall + heroBetFlopThreeQuarterPot; // 6.5 + 4.875 = 11.375 BB
+
+  // Villain folds to Hero's 3/4-pot bet on the flop
+  const endVillainFoldFlop3_4 = new PuzzleNode(
+    'Villain folds to your 3/4-pot bet on the flop. You win the hand.',
+    potAfterHeroFlopBetThreeQuarterPot, // You win the pot: 11.375 BB
+    false,
+    'Flop',
+    'BB',
+    'UTG',
+    heroStackAfterFlopBetThreeQuarterPot, // Hero's stack: 92.125 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    currCardsFlop,
+    potAfterHeroFlopBetThreeQuarterPot // 11.375 BB
+  );
+
+  // Villain checks back on the flop
+  const villainChecksBackFlop = new PuzzleNode(
+    'Villain checks back on the flop.',
+    0,
+    true,
+    'Turn',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // Hero's stack remains at 97.0 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    currCardsFlop,
+    preflopPotAfterHeroCall // 6.5 BB
+  );
+
+  // Turn card
+  // Hero's options on the turn after Villain checks back flop
+  const heroTurnNodeAfterFlopCheck = new PuzzleNode(
+    'Turn has been dealt.',
+    0,
+    true,
+    'Turn',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // 97.0 BB
+    villainStack, // 97.0 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard],
+    preflopPotAfterHeroCall // 6.5 BB
+  );
+
+  // Hero bets 1/2 pot on the turn
+  const heroBetTurnHalfPot = preflopPotAfterHeroCall * 0.5; // 6.5 * 0.5 = 3.25 BB
+  const heroStackAfterTurnBetHalfPot = heroStackAfterPreflopCall - heroBetTurnHalfPot; // 97.0 - 3.25 = 93.75 BB
+  const potAfterHeroTurnBetHalfPot = preflopPotAfterHeroCall + heroBetTurnHalfPot; // 6.5 + 3.25 = 9.75 BB
+
+  // Villain folds to Hero's half-pot bet on the turn
+  const endVillainFoldTurn = new PuzzleNode(
+    'Villain folds to your half-pot bet on the turn. You win the hand.',
+    potAfterHeroTurnBetHalfPot, // You win the pot: 9.75 BB
+    false,
+    'Turn',
+    'BB',
+    'UTG',
+    heroStackAfterTurnBetHalfPot, // Hero's stack: 93.75 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard],
+    potAfterHeroTurnBetHalfPot // 9.75 BB
+  );
+
+  // Villain checks back on the turn
+  const villainChecksBackTurn = new PuzzleNode(
+    'Villain checks back on the turn.',
+    0,
+    true,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // 97.0 BB
+    villainStack, // 97.0 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard],
+    preflopPotAfterHeroCall // 6.5 BB
+  );
+
+  // River card
+  // Hero's options on the river after Villain checks back turn
+  const heroRiverNodeAfterTurnCheck = new PuzzleNode(
+    'River has been dealt.',
+    0,
+    true,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // 97.0 BB
+    villainStack, // 97.0 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    preflopPotAfterHeroCall // 6.5 BB
+  );
+
+  // Hero bets 1/2 pot on the river
+  const heroBetRiverHalfPot = preflopPotAfterHeroCall * 0.5; // 6.5 * 0.5 = 3.25 BB
+  const heroStackAfterRiverBetHalfPot = heroStackAfterPreflopCall - heroBetRiverHalfPot; // 97.0 - 3.25 = 93.75 BB
+  const potAfterHeroRiverBetHalfPot = preflopPotAfterHeroCall + heroBetRiverHalfPot; // 6.5 + 3.25 = 9.75 BB
+
+  // Villain folds to Hero's half-pot bet on the river
+  const endVillainFoldRiver = new PuzzleNode(
+    'Villain folds to your half-pot bet on the river. You win the hand.',
+    potAfterHeroRiverBetHalfPot, // You win the pot: 9.75 BB
+    false,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterRiverBetHalfPot, // Hero's stack: 93.75 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    potAfterHeroRiverBetHalfPot // 9.75 BB
+  );
+
+  // Villain bets 1/2 pot on the river
+  const villainBetRiverAmount = preflopPotAfterHeroCall * 0.5; // 6.5 * 0.5 = 3.25 BB
+  villainStack -= villainBetRiverAmount; // Villain's stack: 97.0 - 3.25 = 93.75 BB
+  const villainStackAfterRiverBet = villainStack;
+  const potAfterVillainRiverBet = preflopPotAfterHeroCall + villainBetRiverAmount; // 6.5 + 3.25 = 9.75 BB
+
+  const villainBetsRiver = new PuzzleNode(
+    'Villain bets 1/2 pot on the river.',
+    0,
+    true,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // Hero's stack: 97.0 BB
+    villainStackAfterRiverBet, // Villain's stack: 93.75 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    potAfterVillainRiverBet // 9.75 BB
+  );
+
+  // Hero calls on the river
+  const heroStackAfterRiverCall = heroStackAfterPreflopCall - villainBetRiverAmount; // 97.0 - 3.25 = 93.75 BB
+  const finalPotAfterHeroCall = potAfterVillainRiverBet + villainBetRiverAmount; // 9.75 + 3.25 = 13.0 BB
+
+  const endHeroCallsRiver = new PuzzleNode(
+    'You call. Villain shows A♥, 10♦. You win the showdown.',
+    finalPotAfterHeroCall, // You win the total pot: 13.0 BB
+    false,
+    'Showdown',
+    'BB',
+    'UTG',
+    heroStackAfterRiverCall, // Hero's stack: 93.75 BB
+    villainStackAfterRiverBet, // Villain's stack: 93.75 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    finalPotAfterHeroCall // 13.0 BB
+  );
+
+  // Hero raises to 2.5x Villain's bet on the river
+  const heroRaiseRiverAmount = villainBetRiverAmount * 2.5; // 3.25 * 2.5 = 8.125 BB
+  const heroTotalBetRiver = villainBetRiverAmount + heroRaiseRiverAmount; // 3.25 + 8.125 = 11.375 BB
+  const heroStackAfterRiverRaise = heroStackAfterPreflopCall - heroTotalBetRiver; // 97.0 - 11.375 = 85.625 BB
+  const potAfterHeroRaiseRiver = potAfterVillainRiverBet + heroRaiseRiverAmount; // 9.75 + 8.125 = 17.875 BB
+
+  // Villain folds to Hero's raise on the river
+  const endVillainFoldsToRaise = new PuzzleNode(
+    'Villain folds to your raise. You win the hand.',
+    potAfterHeroRaiseRiver, // You win the pot: 17.875 BB
+    false,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterRiverRaise, // Hero's stack: 85.625 BB
+    villainStackAfterRiverBet, // Villain's stack remains at 93.75 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    potAfterHeroRaiseRiver // 17.875 BB
+  );
+
+  // Hero folds on the river
+  const endHeroFoldsRiver = new PuzzleNode(
+    'You fold. Villain wins the hand.',
+    - (heroBigBlind + heroCallPreflop), // You lose your BB and preflop call: -3.0 BB
+    false,
+    'River',
+    'BB',
+    'UTG',
+    heroStackAfterPreflopCall, // Hero's stack remains at 97.0 BB
+    villainStackAfterRiverBet, // Villain's stack: 93.75 BB
+    ['K♥', 'Q♥'],
+    [...currCardsFlop, turnCard, riverCard],
+    preflopPotAfterHeroCall // Pot remains at 6.5 BB
+  );
+
+  villainBetsRiver.addNextAction('Call', endHeroCallsRiver);
+  villainBetsRiver.addNextAction('Raise 2.5x', endVillainFoldsToRaise);
+  villainBetsRiver.addNextAction('Fold', endHeroFoldsRiver);
+
+  // Hero's options on the river after Villain checks back turn
+  heroRiverNodeAfterTurnCheck.addNextAction('Bet 1/2 Pot', endVillainFoldRiver);
+  heroRiverNodeAfterTurnCheck.addNextAction('Check', villainBetsRiver);
+
+  // Hero's options on the turn after Villain checks back flop
+  heroTurnNodeAfterFlopCheck.addNextAction('Bet 1/2 Pot', endVillainFoldTurn);
+  heroTurnNodeAfterFlopCheck.addNextAction('Check', villainChecksBackTurn);
+
+  villainChecksBackTurn.addNextAction('Proceed to River', heroRiverNodeAfterTurnCheck);
+
+  villainChecksBackFlop.addNextAction('Proceed to Turn', heroTurnNodeAfterFlopCheck);
+
+  // Hero's options on the flop
   flopHeroNode.addNextAction('Bet 1/2 Pot', endVillainFoldFlop1_2);
   flopHeroNode.addNextAction('Bet 3/4 Pot', endVillainFoldFlop3_4);
   flopHeroNode.addNextAction('Check', villainChecksBackFlop);
 
-  // Preflop end nodes
+  // Hero raises to 10 BB preflop
+  const heroRaisePreflop = 10.0;
+  const hero3BetAmount = heroRaisePreflop - heroBigBlind; // 10.0 - 1.0 = 9.0 BB
+  const heroStackAfter3Bet = heroStack + heroBigBlind - heroRaisePreflop; // 99.0 + 1.0 - 10.0 = 90.0 BB
+  const preflopPotAfterHeroRaise = preflopPotAfterVillainRaise + (heroRaisePreflop - heroBigBlind); // 4.5 + 9.0 = 13.5 BB
+
+  // Villain folds to Hero's preflop 3-bet
+  const endVillainFoldPreflop = new PuzzleNode(
+    'Villain folds to your raise. You win the hand preflop.',
+    preflopPotAfterHeroRaise, // You win the pot: 13.5 BB
+    false,
+    'Preflop',
+    'BB',
+    'UTG',
+    heroStackAfter3Bet, // Hero's stack: 90.0 BB
+    villainStack, // Villain's stack remains at 97.0 BB
+    ['K♥', 'Q♥'],
+    [],
+    preflopPotAfterHeroRaise // 13.5 BB
+  );
+
+  // Preflop decision node
   const preflopHeroNode = new PuzzleNode(
-    'Villain has raised 3 BB. You are in BB with K♥, Q♥.',
+    'Villain has raised to 3 BB. You are in BB with K♥, Q♥.',
     0, // Initial expected value
     true,
     'Preflop',
     'BB',
     'UTG',
-    null,
+    99.0, // Hero's stack after posting BB: 99.0 BB
+    97.0, // Villain's stack after raising: 97.0 BB
     ['K♥', 'Q♥'],
     [],
     preflopPotAfterVillainRaise // 4.5 BB
@@ -263,7 +352,7 @@ function createPokerPuzzle1() {
  *
  * @returns {PuzzleNode} The root node of the second poker puzzle.
  */
- function createPokerPuzzle2() {
+function createPokerPuzzle2() {
   // Blinds
   const smallBlind = 0.5;
   const bigBlind = 1.0;
@@ -277,6 +366,9 @@ function createPokerPuzzle1() {
 
   // Initial pot after blinds
   const initialPot = smallBlind + bigBlind; // 1.5 BB
+
+  let heroStack = 100.0; // Hero starts with 100 BB
+  let villainStack = 100.0; // Villain starts with 100 BB
 
   // Pot after villain's raise
   const potAfterVillainRaise = initialPot + villainRaisePreflop; // 1.5 + 3.0 = 4.5 BB
@@ -302,7 +394,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     heroCallPreflop // 3.0 BB
@@ -316,7 +409,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     potAfterVillainBetFlop // 12.5 BB
@@ -337,7 +431,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     heroCallPreflop + villainBetFlop // 3.0 + 5.0 = 8.0 BB
@@ -351,7 +446,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     potAfterVillainBetTurn // 27.5 BB
@@ -368,7 +464,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterHeroCallTurn // 37.5 BB
@@ -386,7 +483,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterHeroCallTurn // 37.5 BB
@@ -400,7 +498,8 @@ function createPokerPuzzle1() {
     'Showdown',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterHeroBetRiver // 57.5 BB
@@ -422,7 +521,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     potAfterVillainBetTurn // 27.5 BB
@@ -436,7 +536,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterHeroRaiseTurn // 52.5 BB
@@ -454,7 +555,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     potAfterVillainBetTurn // 27.5 BB
@@ -477,7 +579,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     potAfterVillainBetFlop // 12.5 BB
@@ -491,7 +594,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     potAfterHeroRaiseFlop // 27.5 BB
@@ -507,7 +611,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     potAfterVillainBetFlop // 12.5 BB
@@ -526,7 +631,8 @@ function createPokerPuzzle1() {
     'Preflop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [],
     potAfterVillainRaise // 4.5 BB
@@ -540,7 +646,8 @@ function createPokerPuzzle1() {
     'Preflop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [],
     bigBlind // 1.0 BB
@@ -561,7 +668,8 @@ function createPokerPuzzle1() {
     'Preflop',
     'BB',
     'UTG',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [],
     potAfterVillainRaise // 4.5 BB
@@ -577,7 +685,7 @@ function createPokerPuzzle1() {
  *
  * @returns {PuzzleNode} The root node of the third poker puzzle.
  */
- function createPokerPuzzle3() {
+function createPokerPuzzle3() {
   // Blinds
   const smallBlind = 0.5;
   const bigBlind = 1.0;
@@ -588,6 +696,9 @@ function createPokerPuzzle1() {
   // Villain's position and action
   const villainPosition = 'Button';
   const villainRaisePreflop = 2.5;
+
+  let heroStack = 100.0; // Hero starts with 100 BB
+  let villainStack = 100.0; // Villain starts with 100 BB
 
   // Initial pot after blinds
   const initialPot = smallBlind + bigBlind; // 1.5 BB
@@ -603,7 +714,8 @@ function createPokerPuzzle1() {
     'Preflop',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [],
     potAfterVillainRaise // 4.0 BB
@@ -617,7 +729,8 @@ function createPokerPuzzle1() {
     'Preflop',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [],
     bigBlind // 1.0 BB
@@ -638,7 +751,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     preflopPotAfterHeroCall // 5.5 BB
@@ -656,7 +770,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     potAfterVillainBetFlop // 8.5 BB
@@ -670,7 +785,8 @@ function createPokerPuzzle1() {
     'Flop',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     flopCards,
     heroCallPreflop // 1.5 BB
@@ -691,7 +807,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     potAfterHeroCallFlop // 11.5 BB
@@ -709,7 +826,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     potAfterVillainBetTurn // 18.5 BB
@@ -723,7 +841,8 @@ function createPokerPuzzle1() {
     'Turn',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard],
     heroCallPreflop + heroCallFlop // Total amount lost
@@ -744,7 +863,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterHeroCallTurn // 25.5 BB
@@ -762,7 +882,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterVillainBetRiver // 55.5 BB
@@ -776,7 +897,8 @@ function createPokerPuzzle1() {
     'River',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     heroCallPreflop + heroCallFlop + heroCallTurn // Total amount lost
@@ -790,7 +912,8 @@ function createPokerPuzzle1() {
     'Showdown',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     potAfterVillainBetRiver // 55.5 BB
@@ -804,7 +927,8 @@ function createPokerPuzzle1() {
     'Showdown',
     'BB',
     'Button',
-    null,
+    heroStack,
+    villainStack,
     heroHand,
     [...flopCards, turnCard, riverCard],
     heroCallPreflop + heroCallFlop + heroCallTurn + villainBetRiver // Total amount lost

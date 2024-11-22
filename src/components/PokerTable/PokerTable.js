@@ -49,11 +49,13 @@ const PokerTable = ({pokerPuzzle, initialPokerPuzzle}) => {
           position="bottom"
           name={puzzleNode.position}
           cards={puzzleNode.hand}
+          stack={puzzleNode.heroStack}
         />
         <Player
           position="top"
           name={puzzleNode.villainPosition}
           cards={['back', 'back']}
+          stack={puzzleNode.villainStack}
         />
         <Player position="left" name="Player 3" />
         <Player position="right" name="Player 4" />

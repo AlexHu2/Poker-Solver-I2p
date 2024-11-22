@@ -2,7 +2,7 @@
 import React from 'react';
 import './Player.css';
 
-const Player = ({ position, name, cards = [], chipStack = 100 }) => {
+const Player = ({ position, name, cards = [], stack}) => {
   // Function to determine card color based on suit
   const getCardColor = (card) => {
     if (card.includes('♠') || card.includes('♣')) {
@@ -16,7 +16,7 @@ const Player = ({ position, name, cards = [], chipStack = 100 }) => {
   return (
     <div className={`player ${position}`}>
       <div className="player-name">{name}</div>
-      <div className="player-chips"> {`${chipStack} BB`} </div>
+      <div className="player-chips"> {`${stack} BB`} </div>
       <div className="player-cards">
         {cards.map((card, index) => (
           <div

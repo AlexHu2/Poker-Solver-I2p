@@ -1,10 +1,8 @@
-// PuzzleNode.js
-
 /**
  * Represents a node in the poker puzzle game, encapsulating the current game state
  * and possible subsequent actions.
  */
- class PuzzleNode {
+class PuzzleNode {
   /**
    * Initializes a PuzzleNode with the specified parameters.
    *
@@ -14,7 +12,8 @@
    * @param {string} stage - Current stage of the game (e.g., "Preflop", "Flop").
    * @param {string} position - Hero's position (e.g., "UTG", "BB").
    * @param {string} villainPosition - Villain's position (e.g., "UTG", "BB").
-   * @param {number|null} [stack=null] - Optional stack size.
+   * @param {number} [heroStack=0] - Hero's stack amount.
+   * @param {number} [villainStack=0] - Villain's stack amount.
    * @param {Array<string>} [hand=[]] - Optional array representing hero's hand.
    * @param {Array<string>} [currCards=[]] - Optional array of current community cards.
    * @param {number} [potSize=0.00] - The current size of the pot.
@@ -26,10 +25,11 @@
     stage,
     position,
     villainPosition,
-    stack = null,
+    heroStack = 0,
+    villainStack = 0,
     hand = [],
     currCards = [],
-    potSize = 0.00 // Added potSize parameter with default value
+    potSize = 0.00
   ) {
     this.description = description;
     this.expectedValue = expectedValue;
@@ -38,7 +38,8 @@
     this.stage = stage;
     this.position = position;
     this.villainPosition = villainPosition;
-    this.stack = stack;
+    this.heroStack = parseFloat(heroStack.toFixed(2)); // Hero's stack amount
+    this.villainStack = parseFloat(villainStack.toFixed(2)); // Villain's stack amount
     this.hand = hand; // Array of individual cards, e.g., ["K♥", "Q♥"]
     this.currCards = currCards; // Array of community cards, e.g., ["K♠", "10♠", "8♦"]
     this.potSize = parseFloat(potSize.toFixed(2)); // Initialize potSize with two decimals
@@ -68,8 +69,9 @@
       stage: ${this.stage},
       position: ${this.position},
       villainPosition: ${this.villainPosition},
-      stack: ${this.stack},
-      potSize: ${this.potSize.toFixed(2)}, // Included potSize
+      heroStack: ${this.heroStack.toFixed(2)},
+      villainStack: ${this.villainStack.toFixed(2)},
+      potSize: ${this.potSize.toFixed(2)},
       hand: ${this.hand.join(', ')},
       currCards: ${this.currCards.join(', ')}
     }`;
