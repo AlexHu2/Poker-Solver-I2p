@@ -40,7 +40,8 @@ function createPokerPuzzle1() {
     villainStack, // Villain's stack is at 97.0 BB
     ['K♥', 'Q♥'], // Hero's hand as an array
     [],
-    initialPot // Pot remains as blinds: 1.5 BB
+    initialPot, // Pot remains as blinds: 1.5 BB
+    0
   );
 
   // If Hero calls preflop
@@ -83,7 +84,8 @@ function createPokerPuzzle1() {
     villainStack, // Villain's stack remains at 97.0 BB
     ['K♥', 'Q♥'],
     currCardsFlop,
-    potAfterHeroFlopBetHalfPot // 9.75 BB
+    potAfterHeroFlopBetHalfPot,// 9.75 BB
+    100 - villainStack
   );
 
   // Hero bets 3/4 pot on the flop
@@ -103,7 +105,8 @@ function createPokerPuzzle1() {
     villainStack, // Villain's stack remains at 97.0 BB
     ['K♥', 'Q♥'],
     currCardsFlop,
-    potAfterHeroFlopBetThreeQuarterPot // 11.375 BB
+    potAfterHeroFlopBetThreeQuarterPot, // 11.375 BB
+    100 - villainStack
   );
 
   // Villain checks back on the flop
@@ -154,7 +157,8 @@ function createPokerPuzzle1() {
     villainStack, // Villain's stack remains at 97.0 BB
     ['K♥', 'Q♥'],
     [...currCardsFlop, turnCard],
-    potAfterHeroTurnBetHalfPot // 9.75 BB
+    potAfterHeroTurnBetHalfPot, // 9.75 BB
+    100 - villainStack
   );
 
   // Villain checks back on the turn
@@ -205,7 +209,8 @@ function createPokerPuzzle1() {
     villainStack, // Villain's stack remains at 97.0 BB
     ['K♥', 'Q♥'],
     [...currCardsFlop, turnCard, riverCard],
-    potAfterHeroRiverBetHalfPot // 9.75 BB
+    potAfterHeroRiverBetHalfPot, // 9.75 BB
+    100 - villainStack
   );
 
   // Villain bets 1/2 pot on the river
@@ -243,7 +248,8 @@ function createPokerPuzzle1() {
     villainStackAfterRiverBet, // Villain's stack: 93.75 BB
     ['K♥', 'Q♥'],
     [...currCardsFlop, turnCard, riverCard],
-    finalPotAfterHeroCall // 13.0 BB
+    finalPotAfterHeroCall, // 13.0 BB
+    100 - villainStackAfterRiverBet
   );
 
   // Hero raises to 2.5x Villain's bet on the river
@@ -264,7 +270,8 @@ function createPokerPuzzle1() {
     villainStackAfterRiverBet, // Villain's stack remains at 93.75 BB
     ['K♥', 'Q♥'],
     [...currCardsFlop, turnCard, riverCard],
-    potAfterHeroRaiseRiver // 17.875 BB
+    potAfterHeroRaiseRiver, // 17.875 BB
+    100 - villainStackAfterRiverBet
   );
 
   // Hero folds on the river
@@ -279,7 +286,8 @@ function createPokerPuzzle1() {
     villainStackAfterRiverBet, // Villain's stack: 93.75 BB
     ['K♥', 'Q♥'],
     [...currCardsFlop, turnCard, riverCard],
-    preflopPotAfterHeroCall // Pot remains at 6.5 BB
+    preflopPotAfterHeroCall, // Pot remains at 6.5 BB
+    0
   );
 
   villainBetsRiver.addNextAction('Call', endHeroCallsRiver);

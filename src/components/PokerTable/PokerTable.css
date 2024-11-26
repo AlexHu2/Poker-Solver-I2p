@@ -29,6 +29,18 @@
   z-index: 1000;
 }
 
+.puzzle-end-description {
+  position: absolute;
+  top: -100px; /* Move above the table */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  text-align: center;
+  z-index: 1000;
+}
 
 body, html {
   margin: 0;

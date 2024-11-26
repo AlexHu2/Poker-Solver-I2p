@@ -17,6 +17,7 @@ class PuzzleNode {
    * @param {Array<string>} [hand=[]] - Optional array representing hero's hand.
    * @param {Array<string>} [currCards=[]] - Optional array of current community cards.
    * @param {number} [potSize=0.00] - The current size of the pot.
+   * @param {number} ev - Expected value of winning
    */
   constructor(
     description,
@@ -29,7 +30,8 @@ class PuzzleNode {
     villainStack = 0,
     hand = [],
     currCards = [],
-    potSize = 0.00
+    potSize = 0.00,
+    ev
   ) {
     this.description = description;
     this.expectedValue = expectedValue;
@@ -43,6 +45,7 @@ class PuzzleNode {
     this.hand = hand; // Array of individual cards, e.g., ["K♥", "Q♥"]
     this.currCards = currCards; // Array of community cards, e.g., ["K♠", "10♠", "8♦"]
     this.potSize = parseFloat(potSize.toFixed(2)); // Initialize potSize with two decimals
+    this.ev = ev;
   }
 
   /**

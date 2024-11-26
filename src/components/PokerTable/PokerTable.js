@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import ActionPanel from './ActionPanel';
 import './PokerTable.css';
 import Player from './Player';
+import Toast from 'react-bootstrap/Toast';
+import Alert from 'react-bootstrap/Alert';
 
 const PokerTable = ({pokerPuzzle, initialPokerPuzzle}) => {
   // Initialize the puzzle node as state
@@ -33,13 +35,32 @@ const PokerTable = ({pokerPuzzle, initialPokerPuzzle}) => {
     setPuzzleNode(initialPokerPuzzle);
   };
 
+  // Determine the Alert variant based on EV
+  const getAlertVariant = () => {
+    if (puzzleNode.ev > 0) {
+      return 'success';
+    }
+    else {
+      return 'danger';
+    }
+  };
+
+
   return (
     <div className="table-container">
       <div className="poker-table">
         {/* Display the puzzle description */}
-        <div className="puzzle-description">
-          {puzzleNode.description}
-        </div>
+          {Object.keys(puzzleNode.nextActions).length > 0 ? (
+            <div className="puzzle-description">
+              {puzzleNode.description}
+            </div>
+          ) : (
+            <div className="puzzle-end-description">
+              <Alert key={getAlertVariant()} variant={getAlertVariant()}>
+                {puzzleNode.description} Total EV: {puzzleNode.ev}.
+              </Alert>
+            </div>
+          )}
 
         {/* Community Cards Component */}
         <CommunityCards cards={puzzleNode.currCards} />
