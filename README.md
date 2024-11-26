@@ -4,6 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+FIrst you need to open the src directory. This can be done manually or with the command below:
+### 'cd src'
+
 In the project directory, you can run:
 
 ### `npm start`
