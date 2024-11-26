@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const WeeklyLeaderboard = ({ show, onClose }) => {
+const AllTimeLeaderboard = ({ show, onClose }) => {
   const players = [
-    { name: 'Brandon', points: 200 },
-    { name: 'Daniel', points: 180 },
-    { name: 'Alex', points: 170 },
-    { name: 'Alex 2.0', points: 160 },
+    { name: 'Brandon', points: 2000 },
+    { name: 'Daniel', points: 1800 },
+    { name: 'Alex', points: 1700 },
+    { name: 'Alex 2.0', points: 1695 },
   ];
 
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Weekly Leaderboard</Modal.Title>
+        <Modal.Title>All Time Leaderboard</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h5>Top Players This Week</h5>
+        <h5>Top Players of All Time</h5>
         {players.map((player, index) => (
           <div key={index} className="d-flex justify-content-between">
             <span>{player.name}</span>
@@ -33,4 +33,4 @@ const WeeklyLeaderboard = ({ show, onClose }) => {
   );
 };
 
-export default WeeklyLeaderboard;
+export default AllTimeLeaderboard;
